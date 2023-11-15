@@ -8,15 +8,22 @@
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
-
         <RootNamespace>AutoClosedUnionGenerator</RootNamespace>
-        <PackageId>AutoClosedUnionGenerator</PackageId>
+
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>AutoClosedUnionGenerator</PackageId>
         <Title>AutoClosedUnionGenerator</Title>
         <Authors>Anders Kehlet</Authors>
         <Copyright>Anders Kehlet</Copyright>
+        <Version>1.0.2</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/Serdan/AutoClosedUnionGenerator</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Serdan/AutoClosedUnionGenerator</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,11 +31,13 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" PrivateAssets="all"/>
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers\dotnet\cs" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
+
 </Project>

@@ -1,0 +1,47 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Tool-generated files
+packages/
+
+# .NET Core / .NET Standard specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio 2015/2017/2019 cache/options directory
+.vs/
+
+# JetBrains Rider
+.idea/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# Ignore Visual Studio temporary files
+*.pidb
+*.svclog
+*.scc

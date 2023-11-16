@@ -16,19 +16,18 @@ public class CaseGeneratorTests
         namespace TestNamespace
         {
             [ExhaustiveMatching.AutoClosedAttribute]
-            public partial abstract record TokenKind
+            public partial record TokenKind
             {
-                public partial sealed record Number(string Value);
-                public partial sealed record Plus;
-                public partial sealed record Minus;
+                partial record Number(string Value);
+                partial record Plus;
+                partial record Minus;
             }
             
             [ExhaustiveMatching.AutoClosedAttribute]
-            public partial abstract class TokenKind2
+            public partial class Option<TValue>
             {
-                public partial sealed class Number(string Value);
-                public partial sealed class Plus;
-                public partial sealed class Minus;
+                partial class Some(TValue Value);
+                partial class None;
             }
         }
         """;
@@ -71,24 +70,20 @@ public class CaseGeneratorTests
         
         namespace TestNamespace;
         
-        [Closed(typeof(Number), typeof(Plus), typeof(Minus))]
-        public partial abstract class TokenKind2
+        [Closed(typeof(Some), typeof(None))]
+        public partial abstract class Option<TValue>
         {
-            private TokenKind2() { }
+            private Option() { }
         
-            public partial sealed class Number: TokenKind2;
+            public partial sealed class Some: Option<TValue>;
         
-            public partial sealed class Plus: TokenKind2;
-        
-            public partial sealed class Minus: TokenKind2;
+            public partial sealed class None: Option<TValue>;
         
             public static class Cons
             {
-                public static TokenKind2 Number(string Value) => new Number(Value);
+                public static Option<TValue> Number(TValue Value) => new Some(Value);
         
-                public static TokenKind2 Plus { get; } = new Plus();
-        
-                public static TokenKind2 Minus { get; } = new Minus();
+                public static Option<TValue> None { get; } = new None();
             }
         }
         """;

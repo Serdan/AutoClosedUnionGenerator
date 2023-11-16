@@ -41,15 +41,15 @@ public class CaseGeneratorTests
         namespace TestNamespace;
         
         [Closed(typeof(Number), typeof(Plus), typeof(Minus))]
-        public partial abstract record TokenKind
+        abstract public partial record TokenKind
         {
             private TokenKind() { }
         
-            public partial sealed record Number: TokenKind;
+            public sealed partial record Number: TokenKind;
         
-            public partial sealed record Plus: TokenKind;
+            public sealed partial record Plus: TokenKind;
         
-            public partial sealed record Minus: TokenKind;
+            public sealed partial record Minus: TokenKind;
         
             public static class Cons
             {
@@ -71,17 +71,17 @@ public class CaseGeneratorTests
         namespace TestNamespace;
         
         [Closed(typeof(Some), typeof(None))]
-        public partial abstract class Option<TValue>
+        abstract public partial class Option<TValue>
         {
             private Option() { }
         
-            public partial sealed class Some: Option<TValue>;
+            public sealed partial class Some: Option<TValue>;
         
-            public partial sealed class None: Option<TValue>;
+            public sealed partial class None: Option<TValue>;
         
             public static class Cons
             {
-                public static Option<TValue> Number(TValue Value) => new Some(Value);
+                public static Option<TValue> Some(TValue Value) => new Some(Value);
         
                 public static Option<TValue> None { get; } = new None();
             }
@@ -109,18 +109,14 @@ public class CaseGeneratorTests
         // Run generators and retrieve all results.
         var runResult = driver.RunGenerators(compilation).GetRunResult();
 
-        // All generated files can be found in 'RunResults.GeneratedTrees'.
-        var generatedFileSyntax = runResult.GeneratedTrees
-                                           .Where(t => t.FilePath.EndsWith(".g.cs"))
-                                           .Select(x => x.GetText().ToString())
-                                           .ToArray();
-        
-        string[] expected = [ExpectedGeneratedRecordText, ExpectedGeneratedClassText];
+        var a = from trees in runResult.GeneratedTrees
+                where trees.FilePath.EndsWith(".g.cs")
+                let text = trees.GetText().ToString()
+                select (Name: trees.FilePath.Split('\\').Last(), text);
 
-        // Complex generators should be tested using text comparison.
-        Assert.Equal(
-            expected,
-            generatedFileSyntax
-        );
+        var generated = a.ToDictionary(x => x.Name, x => x.text);
+
+        Assert.Equal(ExpectedGeneratedClassText, generated["Option.g.cs"]);
+        Assert.Equal(ExpectedGeneratedRecordText, generated["TokenKind.g.cs"]);
     }
 }

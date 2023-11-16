@@ -36,12 +36,12 @@ public class CaseGenerator : IIncrementalGenerator
         var query = from member in classSymbol.GetTypeMembers()
                     let syntax = member.GetSyntax()
                     where syntax.IsPartial()
-                    select new CaseType(member.Name, syntax.GetDeclarationSyntax(), GetArgs(member));
+                    select new CaseType(member.Name, GetCaseDeclaration(syntax), GetArgs(member));
 
         var members = query.ToImmutableArray();
 
         var declaration = context.TargetNode.As<TypeDeclarationSyntax>()
-                                 .Apply(x => $"{x.Modifiers} {x.Keyword} {containingTypeIdentifier}");
+                                 .Apply(GetUnionDeclaration);
 
         var ns = classSymbol.ContainingNamespace.ToString();
 
@@ -49,7 +49,7 @@ public class CaseGenerator : IIncrementalGenerator
 
         static ImmutableArray<CaseTypeArg> GetArgs(INamedTypeSymbol symbol)
         {
-            var constructor = symbol.Constructors.FirstOrDefault(x => x.DeclaredAccessibility == Accessibility.Public);
+            var constructor = symbol.Constructors.FirstOrDefault(x => x.DeclaredAccessibility is Accessibility.Public);
             if (constructor is null)
             {
                 return ImmutableArray<CaseTypeArg>.Empty;
@@ -58,6 +58,41 @@ public class CaseGenerator : IIncrementalGenerator
             return constructor.Parameters
                               .Select(x => new CaseTypeArg(x.Type.ToString(), x.Name))
                               .ToImmutableArray();
+        }
+
+        static string GetUnionDeclaration(TypeDeclarationSyntax syntax)
+        {
+            var builder = new StringBuilder();
+
+            if (syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) is false)
+            {
+                builder.Append("abstract ");
+            }
+
+            builder.Append(syntax.GetDeclarationSyntax());
+            builder.Append(syntax.TypeParameterList);
+
+            return builder.ToString();
+        }
+
+        static string GetCaseDeclaration(TypeDeclarationSyntax syntax)
+        {
+            var builder = new StringBuilder();
+
+            if (syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.PublicKeyword)) is false)
+            {
+                builder.Append("public ");
+            }
+
+            if (syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.SealedKeyword)) is false)
+            {
+                builder.Append("sealed ");
+            }
+
+            builder.Append(syntax.GetDeclarationSyntax());
+            builder.Append(syntax.TypeParameterList);
+
+            return builder.ToString();
         }
     }
 

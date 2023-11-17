@@ -40,7 +40,7 @@ public class CaseGeneratorTests
         
         namespace TestNamespace;
         
-        [Closed(typeof(Number), typeof(Plus), typeof(Minus))]
+        [Closed(typeof(TokenKind.Number), typeof(TokenKind.Plus), typeof(TokenKind.Minus))]
         abstract public partial record TokenKind
         {
             private TokenKind() { }
@@ -70,7 +70,7 @@ public class CaseGeneratorTests
         
         namespace TestNamespace;
         
-        [Closed(typeof(Some), typeof(None))]
+        [Closed(typeof(Option<>.Some), typeof(Option<>.None))]
         abstract public partial class Option<TValue>
         {
             private Option() { }

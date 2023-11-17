@@ -28,8 +28,11 @@ public class CaseGenerator : IIncrementalGenerator
 
     private static Data Transform(GeneratorAttributeSyntaxContext context, CancellationToken token)
     {
-        var containingTypeIdentifier = context.TargetNode.As<TypeDeclarationSyntax>()
+        var typeIdentifier = context.TargetNode.As<TypeDeclarationSyntax>()
                                               .Apply(x => x.Identifier + x.TypeParameterList?.ToString());
+
+        var openTypeIdentifier = context.TargetNode.As<TypeDeclarationSyntax>()
+                                        .Apply(x => x.Identifier + (x.Arity > 0 ? "<" + new string(',', x.Arity - 1) + ">" : ""));
 
         var classSymbol = context.TargetSymbol.As<INamedTypeSymbol>();
 
@@ -45,7 +48,7 @@ public class CaseGenerator : IIncrementalGenerator
 
         var ns = classSymbol.ContainingNamespace.ToString();
 
-        return new(classSymbol.Name, containingTypeIdentifier, declaration, ns, members);
+        return new(classSymbol.Name, typeIdentifier, openTypeIdentifier, declaration, ns, members);
 
         static ImmutableArray<CaseTypeArg> GetArgs(INamedTypeSymbol symbol)
         {
@@ -99,7 +102,7 @@ public class CaseGenerator : IIncrementalGenerator
     private static void Execute(SourceProductionContext context, Data data)
     {
         var types = data.NestedTypes
-                        .Select(x => $"typeof({x.Name})")
+                        .Select(x => $"typeof({data.OpenTypeIdentifier}.{x.Name})")
                         .Apply(x => string.Join(", ", x));
 
         var memberQuery = from t in data.NestedTypes
@@ -163,7 +166,7 @@ public class CaseGenerator : IIncrementalGenerator
         }
     }
 
-    private record Data(string Name, string TypeIdentifier, string Declaration, string Namespace, ImmutableArray<CaseType> NestedTypes);
+    private record Data(string Name, string TypeIdentifier, string OpenTypeIdentifier, string Declaration, string Namespace, ImmutableArray<CaseType> NestedTypes);
 
     private record CaseTypeArg(string Type, string Name);
 

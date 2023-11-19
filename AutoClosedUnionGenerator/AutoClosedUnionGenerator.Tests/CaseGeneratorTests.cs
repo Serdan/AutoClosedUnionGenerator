@@ -10,12 +10,17 @@ public class CaseGeneratorTests
     private const string UnionClassText = """
         namespace ExhaustiveMatching
         {
-            public class AutoClosedAttribute : Attribute { }
+            public class AutoClosedAttribute : Attribute
+            { 
+                public AutoClosedAttribute(bool serializable) { }
+                
+                public bool Serializable { get; init; }
+            }
         }
 
         namespace TestNamespace
         {
-            [ExhaustiveMatching.AutoClosedAttribute]
+            [ExhaustiveMatching.AutoClosedAttribute(serializable: true, Serializable = true)]
             public partial record TokenKind
             {
                 partial record Number(string Value);
@@ -23,7 +28,7 @@ public class CaseGeneratorTests
                 partial record Minus;
             }
             
-            [ExhaustiveMatching.AutoClosedAttribute]
+            [ExhaustiveMatching.AutoClosedAttribute(true)]
             public partial class Option<TValue>
             {
                 partial class Some(TValue Value);
@@ -75,9 +80,15 @@ public class CaseGeneratorTests
         {
             private Option() { }
         
-            public sealed partial class Some: Option<TValue>;
+            public sealed partial class Some: Option<TValue>
+            {
+                public string Kind { get; } = nameof(Some);
+            }
         
-            public sealed partial class None: Option<TValue>;
+            public sealed partial class None: Option<TValue>
+            {
+                public string Kind { get; } = nameof(None);
+            }
         
             public static partial class Cons
             {

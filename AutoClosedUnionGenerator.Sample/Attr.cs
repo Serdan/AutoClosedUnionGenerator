@@ -1,4 +1,4 @@
-﻿namespace ExhaustiveMatching
+﻿namespace Kehlet.Functional
 {
     public class AutoClosedAttribute : Attribute
     { 

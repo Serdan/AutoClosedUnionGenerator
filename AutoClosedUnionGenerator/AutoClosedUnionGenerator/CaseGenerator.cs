@@ -15,7 +15,7 @@ public class CaseGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var provider = context.SyntaxProvider.ForAttributeWithMetadataName(
-            "ExhaustiveMatching.AutoClosedAttribute",
+            "Kehlet.Functional.AutoClosedAttribute",
             Filter,
             Transform
         );

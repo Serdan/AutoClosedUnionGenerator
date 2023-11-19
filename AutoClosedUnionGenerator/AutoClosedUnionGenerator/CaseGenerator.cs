@@ -40,7 +40,7 @@ public class CaseGenerator : IIncrementalGenerator
 
         var query = from member in classSymbol.GetTypeMembers()
                     let syntax = member.GetSyntax()
-                    where syntax.IsPartial()
+                    where syntax.IsPartial() && syntax.Identifier.ValueText != "Cons"
                     select new CaseType(member.Name, GetCaseDeclaration(syntax), GetArgs(member));
 
         var members = query.ToImmutableArray();

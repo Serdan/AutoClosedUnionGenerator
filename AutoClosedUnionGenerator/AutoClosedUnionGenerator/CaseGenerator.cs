@@ -136,7 +136,7 @@ public class CaseGenerator : IIncrementalGenerator
 
             {{members}}
             
-                public static class Cons
+                public static partial class Cons
                 {
             {{cons}}
                 }
@@ -149,7 +149,7 @@ public class CaseGenerator : IIncrementalGenerator
         static string Cons(string unionName, CaseType type)
         {
             var builder = new StringBuilder();
-            builder.Append($"        public static {unionName} {type.Name}");
+            builder.Append($"        public static {unionName} New{type.Name}");
 
             if (type.Args.IsDefaultOrEmpty)
             {

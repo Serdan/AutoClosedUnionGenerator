@@ -51,13 +51,13 @@ public class CaseGeneratorTests
         
             public sealed partial record Minus: TokenKind;
         
-            public static class Cons
+            public static partial class Cons
             {
-                public static TokenKind Number(string Value) => new Number(Value);
+                public static TokenKind NewNumber(string Value) => new Number(Value);
         
-                public static TokenKind Plus { get; } = new Plus();
+                public static TokenKind NewPlus { get; } = new Plus();
         
-                public static TokenKind Minus { get; } = new Minus();
+                public static TokenKind NewMinus { get; } = new Minus();
             }
         }
         """;
@@ -79,11 +79,11 @@ public class CaseGeneratorTests
         
             public sealed partial class None: Option<TValue>;
         
-            public static class Cons
+            public static partial class Cons
             {
-                public static Option<TValue> Some(TValue Value) => new Some(Value);
+                public static Option<TValue> NewSome(TValue Value) => new Some(Value);
         
-                public static Option<TValue> None { get; } = new None();
+                public static Option<TValue> NewNone { get; } = new None();
             }
         }
         """;

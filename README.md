@@ -1,6 +1,6 @@
 # AutoClosedUnionGenerator
 
-Using this package requires ExhaustiveMatching.Analyzer
+This package includes a dependency on ExhaustiveMatching.Analyzer
 
 The following:
 

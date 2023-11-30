@@ -32,11 +32,11 @@ abstract public partial record AgentMessage
 
     public static partial class Cons
     {
-        public static AgentMessage ListProjectsMessage { get; } = new ListProjectsMessage();
+        public static AgentMessage NewListProjectsMessage { get; } = new ListProjectsMessage();
 
-        public static AgentMessage OpenProjectMessage(string ProjectName) => new OpenProjectMessage(ProjectName);
+        public static AgentMessage NewOpenProjectMessage(string ProjectName) => new OpenProjectMessage(ProjectName);
 
-        public static AgentMessage ListProjectDirectoryMessage(string ProjectName, string Path) => new ListProjectDirectoryMessage(ProjectName, Path);
+        public static AgentMessage NewListProjectDirectoryMessage(string ProjectName, string Path) => new ListProjectDirectoryMessage(ProjectName, Path);
     }
 }
 ```

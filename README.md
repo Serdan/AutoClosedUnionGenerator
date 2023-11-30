@@ -20,7 +20,7 @@ Generates this:
 
 ```csharp
 [Closed(typeof(ListProjectsMessage), typeof(OpenProjectMessage), typeof(ListProjectDirectoryMessage))]
-public abstract partial record AgentMessage
+abstract public partial record AgentMessage
 {
     private AgentMessage() { }
 
@@ -30,7 +30,7 @@ public abstract partial record AgentMessage
 
     public sealed partial record ListProjectDirectoryMessage: AgentMessage;
 
-    public static class Cons
+    public static partial class Cons
     {
         public static AgentMessage ListProjectsMessage { get; } = new ListProjectsMessage();
 

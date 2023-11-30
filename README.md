@@ -6,13 +6,13 @@ The following:
 
 ```csharp
 [AutoClosed]
-public abstract partial record AgentMessage
+public partial record AgentMessage
 {
-    public sealed partial record ListProjectsMessage;
+    partial record ListProjectsMessage;
 
-    public sealed partial record OpenProjectMessage(string ProjectName);
+    partial record OpenProjectMessage(string ProjectName);
 
-    public sealed partial record ListProjectDirectoryMessage(string ProjectName, string Path);
+    partial record ListProjectDirectoryMessage(string ProjectName, string Path);
 }
 ```
 
@@ -40,3 +40,5 @@ public abstract partial record AgentMessage
     }
 }
 ```
+
+Support for JSON serialization will be generated if `true` is passed to the attribute constructor. This does NOT work with generic unions (mainly a question of will, as it should be relatively easy to implement).

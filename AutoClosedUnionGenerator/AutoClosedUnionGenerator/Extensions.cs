@@ -23,6 +23,9 @@ public static class Extensions
 
     public static bool IsPartial(this TypeDeclarationSyntax syntaxNode) =>
         syntaxNode.Modifiers.Any(x => x.IsKind(SyntaxKind.PartialKeyword));
+    
+    public static bool IsStatic(this TypeDeclarationSyntax syntaxNode) =>
+        syntaxNode.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword));
 
     public static string GetDeclarationSyntax(this TypeDeclarationSyntax syntaxNode) =>
         syntaxNode.Apply(x => x.Modifiers + " " + x.Keyword + " " + x.Identifier);

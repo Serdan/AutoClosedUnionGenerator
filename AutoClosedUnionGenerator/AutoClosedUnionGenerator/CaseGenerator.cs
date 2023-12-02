@@ -12,10 +12,14 @@ namespace AutoClosedUnionGenerator;
 [Generator]
 public class CaseGenerator : IIncrementalGenerator
 {
+    private const string AttributeName = "AutoClosedUnionGenerator.AutoClosedAttribute";
+    
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+        context.RegisterPostInitializationOutput(x => x.AddSource($"{AttributeName}.g.cs", SourceText.From(attribute, Encoding.UTF8)));
+
         var provider = context.SyntaxProvider.ForAttributeWithMetadataName(
-            "Kehlet.Functional.AutoClosedAttribute",
+            AttributeName,
             Filter,
             Transform
         );
@@ -148,7 +152,7 @@ public class CaseGenerator : IIncrementalGenerator
             {{cons}}
                 }
             }
-            
+
             {{conv}}
             """;
 
@@ -195,7 +199,7 @@ public class CaseGenerator : IIncrementalGenerator
                      select $"            nameof({typeName}.{type}) => JsonSerializer.Deserialize<{typeName}.{type}>(root.GetRawText(), options)!,";
 
             var str = string.Join("\r\n", sw);
-            
+
             return $$"""
                 file class UnionJsonConverter : JsonConverter<{{typeName}}>
                 {
@@ -241,4 +245,16 @@ public class CaseGenerator : IIncrementalGenerator
     private record CaseTypeArg(string Type, string Name);
 
     private record CaseType(string Name, string Declaration, ImmutableArray<CaseTypeArg> Args);
+
+    private string attribute = """
+        using System;
+
+        namespace AutoClosedUnionGenerator;
+
+        [AttributeUsage(AttributeTargets.Class)]
+        public class AutoClosedAttribute(bool serializable = false) : Attribute
+        {
+        }
+
+        """;
 }

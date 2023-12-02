@@ -1,6 +1,4 @@
-﻿using Kehlet.Functional;
-
-namespace AutoClosedUnionGenerator.Sample;
+﻿namespace AutoClosedUnionGenerator.Sample;
 
 [AutoClosed(true)]
 public partial record TokenKind
